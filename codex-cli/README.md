@@ -117,6 +117,10 @@ export OPENAI_API_KEY="your-api-key-here"
 > export <provider>_API_KEY="your-api-key-here"
 > ```
 >
+> For Gemini you can provide multiple API keys by setting
+> `GEMINI_API_KEYS` to a comma-separated list. Keys will be used in
+> round-robin order.
+>
 > If you use a provider not listed above, you must also set the base URL for the provider:
 >
 > ```shell
@@ -124,6 +128,11 @@ export OPENAI_API_KEY="your-api-key-here"
 > ```
 
 </details>
+<br />
+
+To experiment with provider swapping in a standalone Python script, you can use
+`llm_wrapper.py` at the repository root. This wrapper rotates `GEMINI_API_KEYS`
+automatically and falls back to OpenAI when `LLM_PROVIDER` is set accordingly.
 <br />
 
 Run interactively:

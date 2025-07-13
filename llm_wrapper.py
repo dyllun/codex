@@ -2,6 +2,16 @@ import os
 import itertools
 from typing import List, Dict, Any
 
+# Default Gemini keys fallback if GEMINI_API_KEYS env is unset
+DEFAULT_GEMINI_KEYS = [
+    "AIzaSyC4Wvi3dGfxILk37TRnhON_vcWgZi09ahQ",
+    "AIzaSyDb9GBb0v5VU9Qx9eQbbkdOZYjtnRvaJ60",
+    "AIzaSyAwS8GQTjCJWjfbGD8G6_WwHIe4cRpEfxI",
+    "AIzaSyCjcUwsISnTk8MBUeU0jX2EwKzE-KQOYDY",
+    "AIzaSyBh1D_sPGa9d9mX8XfiTF3E4iZKjB8hQ7k",
+    "AIzaSyB-4dpI0kAcE3T3Jb4e_NKuvvXy9_HXHcE",
+]
+
 try:
     import openai
 except ImportError:
@@ -21,8 +31,13 @@ def _convert_messages_to_gemini(messages: List[Dict[str, str]]) -> List[Dict[str
 class LLMBackend:
     def __init__(self):
         self.provider = os.getenv("LLM_PROVIDER", "openai").lower()
-        gemini_keys = os.getenv("GEMINI_API_KEYS", "").split(',')
-        self._gemini_cycle = itertools.cycle([k for k in gemini_keys if k])
+        gemini_env = os.getenv("GEMINI_API_KEYS", "")
+        gemini_keys = (
+            [k.strip() for k in gemini_env.split(",") if k.strip()]
+            if gemini_env
+            else DEFAULT_GEMINI_KEYS
+        )
+        self._gemini_cycle = itertools.cycle(gemini_keys)
 
     def _ask_openai(self, messages: List[Dict[str, str]], **kwargs) -> Dict[str, Any]:
         if openai is None:

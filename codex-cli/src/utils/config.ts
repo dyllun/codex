@@ -109,11 +109,29 @@ export function getBaseUrl(provider: string = "openai"): string | undefined {
   return undefined;
 }
 
+const providerKeyIndices: Record<string, number> = {};
+
 export function getApiKey(provider: string = "openai"): string | undefined {
   const config = loadConfig();
   const providersConfig = config.providers ?? providers;
   const providerInfo = providersConfig[provider.toLowerCase()];
   if (providerInfo) {
+    // Support comma-separated API keys for simple rotation.
+    const keysEnv =
+      process.env[`${provider.toUpperCase()}_API_KEYS`] ||
+      process.env[`${providerInfo.envKey}s`];
+    if (keysEnv) {
+      const keys = keysEnv
+        .split(",")
+        .map((k) => k.trim())
+        .filter((k) => k.length > 0);
+      if (keys.length > 0) {
+        const idx = providerKeyIndices[provider] ?? 0;
+        providerKeyIndices[provider] = (idx + 1) % keys.length;
+        return keys[idx];
+      }
+    }
+
     if (providerInfo.name === "Ollama") {
       return process.env[providerInfo.envKey] ?? "dummy";
     }

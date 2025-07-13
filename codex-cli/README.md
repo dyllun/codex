@@ -117,6 +117,10 @@ export OPENAI_API_KEY="your-api-key-here"
 > export <provider>_API_KEY="your-api-key-here"
 > ```
 >
+> For Gemini you can provide multiple API keys by setting
+> `GEMINI_API_KEYS` to a comma-separated list. Keys will be used in
+> round-robin order.
+>
 > If you use a provider not listed above, you must also set the base URL for the provider:
 >
 > ```shell

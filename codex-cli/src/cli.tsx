@@ -292,7 +292,12 @@ let config = loadConfig(undefined, undefined, {
 let prompt = cli.input[0];
 const model = cli.flags.model ?? config.model;
 const imagePaths = cli.flags.image;
-const provider = cli.flags.provider ?? config.provider ?? "openai";
+// Allow overriding the provider via environment variable for convenience.
+const provider =
+  process.env["LLM_PROVIDER"] ??
+  cli.flags.provider ??
+  config.provider ??
+  "openai";
 
 const client = {
   issuer: "https://auth.openai.com",

@@ -117,6 +117,24 @@ export OPENAI_API_KEY="your-api-key-here"
 > export <provider>_API_KEY="your-api-key-here"
 > ```
 >
+> Alternatively you can set the provider via the `LLM_PROVIDER` environment
+> variable:
+>
+> ```shell
+> export LLM_PROVIDER=<provider>
+> ```
+>
+> For Gemini you can provide multiple API keys by setting
+> `GEMINI_API_KEYS` to a comma-separated list. Keys will be used in
+> round-robin order.
+>
+> A helper script at `scripts/run_gemini.sh` sets `LLM_PROVIDER=gemini` and can
+> accept a comma-separated key list for quick startup:
+>
+> ```bash
+> ./scripts/run_gemini.sh "key1,key2,key3"
+> ```
+>
 > If you use a provider not listed above, you must also set the base URL for the provider:
 >
 > ```shell
